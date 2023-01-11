@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-deployment
+spec:
+  strategy:
+    type: RollingUpdate # обновление подов , включится 1 обновленный под - старый выключится - включится еще один обновленный под. Итого 2 новых пода.
+    rollingUpdate:  
+      maxSurge: 1 # сколько подов будет обновленно
+      maxUnavailable: 1 #  сколько подов выключаться после обновления 
+  replicas: 2
+  selector:
+    matchLabels:
+      app: my-app
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: nginx:1.20
+        name: nginx
+        ports:
+        - containerPort: 80
+...

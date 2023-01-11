@@ -1,0 +1,64 @@
+Запускаем ReplicaSet
+
+1. Перейдите в директорию:2.replicaset
+
+cd ~/slurm/practice/2.application-abstractions/2.replicaset
+
+2. Запустите replicaset из файла replicaset.yaml командой:
+
+kubectl apply -f replicaset.yaml
+
+3. Проверьте что два pod'а запустились.
+
+    В дальнейшем уже известные команды дублироваться не будут. Самостоятельно подберите нужную команду.
+
+4. Увеличьте количество реплик в replicaset'е до трёх. Для этого воспользуйтесь командой:
+
+kubectl scale replicaset my-replicaset --replicas 3
+
+5. Проверьте что теперь запущено три pod'а.
+
+6. Удалите один из подов командой:
+
+Обратите внимание, что вместо placeholder'a <ИМЯ POD'а> Вам нужно подставить реальное имя одного из pod'ов из команды kubectl get pod
+
+kubectl delete pod <ИМЯ POD'а>
+
+7. Проверьте, что pod'ов все еще так же 3.
+
+8. Обновите версию образа в replicaset'е:
+
+kubectl set image replicaset my-replicaset nginx=nginx:1.21
+
+9. Посмотрите какая версия образа используется теперь в replicaset'е:
+
+kubectl describe replicaset my-replicaset
+
+...
+  Containers:
+   nginx:
+    Image:        nginx:1.21  <------ Вот она
+    Port:         80/TCP
+    Host Port:    0/TCP
+    Environment:  <none>
+    Mounts:       <none>
+  Volumes:        <none>
+...
+
+10. С помощью команды kubectl describe pod <ИМЯ POD'а> проверьте версию образа на запущенных pod'ах replicaset'а.
+
+11. Удалите один из pod'ов и проверьте версию образа в pod'е, созданном вместо удаленного.
+
+12. Скопируйте и отправьте в качестве ответа на данном шаге результат выполнения команды:
+
+kubectl get po <ИМЯ НОВОГО POD'а> -o=jsonpath='{.spec.containers[*].image}{"\n"}'
+
+    Ключ -o jsonpath позволяет получить не весь объект целиком, а только содержимое конкретных полей.
+
+    Он крайне полезен при написании скриптов для автоматизации задач в Kubernetes.
+
+    Почитать про его возможности подробней можно тут и тут.
+
+13. После выполнения задания удалите replicaset:
+
+kubectl delete replicaset --all
