@@ -1,0 +1,29 @@
+ConfigMap
+1. Создаем configmap
+
+Для этого перейдем в нужную директорию и выполним команду:
+
+cd ~/slurm/practice/3.saving-configurations/1.env/
+kubectl apply -f configmap.yaml
+
+2. Проверим результат
+
+kubectl get configmap
+kubectl describe cm my-configmap
+
+3. Применим манифест деплоймента с конфигмапом
+
+kubectl apply -f deployment-with-env-cm.yaml
+
+4. Проверим результат
+
+Для этого выполним команду, подставив вместо < RANDOM > нужное значение(автоподстановка по TAB):
+
+kubectl exec -it my-deployment-< RANDOM > -- env
+
+Результат должен содержать:
+
+TEST=foo
+dbhost=postgresql
+DEBUG=false
+
