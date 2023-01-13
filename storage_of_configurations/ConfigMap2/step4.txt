@@ -1,0 +1,30 @@
+1. Монтирование configmap, как отдельного файла в каталоге через subPath
+
+Применяем манифесты:
+
+kubectl apply -f php-config.yaml
+kubectl apply -f deployment-with-configmap-php.yaml
+
+2. Заходим в под, смотрим на смонтированный файл
+
+kubectl exec -it my-deployment-<TAB> -- bash
+
+ls -lsa /etc
+
+3. Смотрим, что бывает, если попробовать смонтировать файл в существующий каталог.
+
+Исправляем манифест деплоймент, в части точки монтирования configmap my-php-conf
+Убираем subPath, меняем точку монтирования.
+
+kubectl edit deployment my-deployment
+
+  - mountPath: /etc
+    name: php
+
+4. Смотрим причину, по которой не стартует под
+
+kubectl describe pod my-deployment-<TAB>
+
+5. Чистим за собой, удаляем "изломанный" deployment
+
+kubectl delete deployment my-deployment

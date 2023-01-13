@@ -1,0 +1,22 @@
+ConfigMap
+1. Создаем configmap
+
+Для этого перейдем в нужную директорию и выполним команды:
+
+cd ~/slurm/practice/3.saving-configurations/2.configmap/
+kubectl apply -f configmap.yaml
+kubectl apply -f deployment-with-configmap.yaml
+
+2. Проверяем результат
+
+Проверим, что configmap попал в контейнер, для этого пробросим порт из пода и выполним curl.
+Для этого выполним команду, заменив имя pod на имя вашего pod(можно воспользоваться автоподстановкой по TAB).
+
+kubectl port-forward my-deployment-<TAB> 8080:80 &
+curl 127.0.0.1:8080
+
+& - необходим для запуска команд в фоновом режиме.
+
+В результате выполнения curl увидим имя пода, который обработал запрос. Результат должен быть примерно таким:
+
+my-deployment-5b47d48b58-l4t67
