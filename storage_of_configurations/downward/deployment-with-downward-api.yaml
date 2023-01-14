@@ -1,0 +1,82 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: me-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-app
+  strategy:
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 1
+    type: RollingUpdate
+  template:
+    metadata:
+      labels:
+        app: my-app
+    spec:
+      containers:
+      - image: nginx:1.12
+        name: nginx
+        env:
+        - name: TEST
+          value: foo
+        - name: TEST_1
+          valueFrom:
+            secretKeyRef:
+              name: test
+              key: test1
+        - name: __NODE_NAME # создание секции с переменной
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName # получение имени пода и запись в переменную __NODE_NAME
+        - name: __POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: __POD_NAMESPACE
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: __POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: __NODE_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.hostIP
+        - name: __POD_SERVICE_ACCOUNT
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.serviceAccountName
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: 50m
+            memory: 100Mi
+          limits:
+            cpu: 100m
+            memory: 100Mi
+        volumeMounts: # подключение переменной
+        - name: config # подключение переменной config из volumes config
+          mountPath: /etc/nginx/conf.d/ # запись данной переменной в файл
+        - name: podinfo # подключение переменной podinfo из downwardAPI
+          mountPath: /etc/podinfo
+      volumes: # создание секции с переменной
+      - name: config
+        configMap: # подлючение конфигурации configMap
+          name: my-configmap
+      - name: podinfo
+        downwardAPI:
+          items:
+            - path: "labels" # создание файла labels и запись в него всех лейблов metadata.labels
+              fieldRef:
+                fieldPath: metadata.labels
+            - path: "annotations"
+              fieldRef:
+                fieldPath: metadata.annotations
+...

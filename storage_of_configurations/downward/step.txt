@@ -1,0 +1,32 @@
+Downward API
+1. Применим деплоймент
+
+Для этого перейдем в необходимую директорию и выполним команду:
+
+cd ~/slurm/practice/3.saving-configurations/4.downward/
+kubectl apply -f deployment-with-downward-api.yaml
+
+2. Смотрим переменные окружения в контейнере
+
+Для этого выполним команду, подставив вместо < RANDOM > нужное значение(автоподстановка по TAB):
+
+kubectl exec -it my-deployment-< RANDOM > -- env
+
+3. Смотрим файлы в контейнере /etc/podinfo
+
+Для этого выполним команду, подставив вместо < RANDOM > нужное значение(автоподстановка по TAB):
+
+kubectl exec -it my-deployment-< RANDOM > -- cat /etc/podinfo/labels
+
+kubectl exec -it my-deployment-< RANDOM > -- cat /etc/podinfo/annotations
+
+PS: Документация
+
+https://kubernetes.io/docs/tasks/inject-data-application/environment-variable-expose-pod-information/
+https://kubernetes.io/docs/tasks/inject-data-application/downward-api-volume-expose-pod-information/
+4. Очистка
+
+kubectl delete deployment my-deployment
+kubectl delete configmap my-configmap-env
+kubectl delete configmap my-configmap
+kubectl delete secret test
