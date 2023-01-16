@@ -1,0 +1,15 @@
+Hostpath
+1. Перейдем в необходимую директорию и применим манифест
+
+cd ~/slurm/practice/4.saving-data/1.hostpath/
+kubectl apply -f deployment.yaml
+
+2. Проверяем результат
+
+kubectl get pod
+kubectl get all
+kubectl describe replicaset <TAB>
+
+3. Очищаем 
+
+kubectl delete deployment my-deployment
