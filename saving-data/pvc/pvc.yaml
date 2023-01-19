@@ -9,5 +9,5 @@ spec:
   - ReadWriteOnce # ReadWriteMany читать писать можно из нескольких подов (ReadWriteOnce , чтение и запись с одного пода)
   resources:
     requests:
-      storage: 1Gi
+      storage: 1Gi # размер хранилища для pvc
 ...
