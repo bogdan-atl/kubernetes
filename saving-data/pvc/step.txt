@@ -1,0 +1,23 @@
+PV/PVC
+1. Переходим в необходимую директорию и применяем манифест
+
+cd ~/slurm/practice/4.saving-data/3.pvc
+kubectl apply -f pvc.yaml
+
+2. Смотрим результат
+
+kubectl get pvc
+kubectl get pv
+
+3. Запустим приложение, использующее PV
+
+kubectl apply -f .
+
+4. Посмотрим describe и смонтированные тома в контейнере
+
+kubectl describe pod fileshare-<TAB>
+kubectl exec -it fileshare-<TAB> -- df -h
+
+5. Очищаем
+
+kubectl delete -f .

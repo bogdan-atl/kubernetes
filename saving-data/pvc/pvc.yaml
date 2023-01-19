@@ -1,0 +1,13 @@
+---
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: fileshare
+spec:
+  storageClassName: local-storage
+  accessModes:
+  - ReadWriteOnce # ReadWriteMany читать писать можно из нескольких подов (ReadWriteOnce , чтение и запись с одного пода)
+  resources:
+    requests:
+      storage: 1Gi
+...
