@@ -1,0 +1,50 @@
+Resources and Probes
+
+Перейдем в необходимую директорию и создадим deployment с ресурсами и пробами
+
+cd ~/slurm/practice/5.network-abstractions/1.probes/
+kubectl apply -f deployment-with-stuff.yaml
+
+Смотрим что получилось
+
+kubectl get pod
+
+Должны увидеть что-то типа такого:
+
+NAME                             READY   STATUS    RESTARTS   AGE
+my-deployment-69695544f6-v97pe   1/1     Running   0          20s
+my-deployment-69695544f6-xcpq9   1/1     Running   0          20s
+
+Можно выполнить describe pod'a
+
+kubectl describe pod my-deployment-<TAB>
+
+Поменяем специально Readiness Probe на заведомо неверную в манифесте и применим его снова
+
+vim deployment-with-stuff.yaml
+
+    ...
+            readinessProbe:
+              failureThreshold: 3
+              httpGet:
+                path: /appp
+                port: 80
+    ...
+
+Применяем конфигурацию
+
+kubectl apply -f deployment-with-stuff.yaml
+
+Смотрим что получилось
+
+kubectl get pod
+
+Видим что pod'ы не переходят в статус 1/1 Running. Смотрим describe pod'а:
+
+kubectl describe po my-deployment-<TAB>
+
+Видим Unhealthy в Events. И Message от kubelet'a: Readiness probe failed: HTTP probe failed with statuscode: 404
+
+Чистим за собой кластер
+
+kubectl delete deployment --all
