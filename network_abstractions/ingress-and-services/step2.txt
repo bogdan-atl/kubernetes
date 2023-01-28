@@ -1,0 +1,73 @@
+Service
+
+Перейдем в необходимую директорию и применим манифесты в директории app
+
+cd ~/slurm/practice/5.network-abstractions/2.ingress-and-services/
+
+kubectl apply -f app/
+
+Посмотрим на поды и describe одного из них
+
+kubectl get pod
+kubectl describe pod my-deployment-<TAB>
+
+Скопируем IP адрес и попробуем обратиться к нему
+
+curl -I <IP address>
+
+Но так как IP адрес может меняться лучше использовать Service
+Создаем Service типа ClusterIP
+
+kubectl apply -f clusterip.yaml
+
+Посмотрим список сервисов
+
+kubectl get service
+
+При обращении curl'ом на этот IP адрес получаем имя хоста, в данном случае имя пода 
+
+Но как service понял что ему надо отправлять трафик именно в эти поды?
+Выполним
+
+kubectl get pod --show-labels
+
+Видим в LABELS метку app=my-app
+
+Если сделаем describe service'a
+
+kubectl describe svc my-service
+
+То в его поле Selector видим app=my-app
+
+А как мы помним, чтобы service заработал нужно чтобы service и pod'ы были в одном namespace, и чтобы selector соответствовал лейблам подов на которые нужно отправлять трафик
+
+Запустим тестовое приложение, с которого мы будем обращаться к основному:
+
+kubectl run test --image=amouat/network-utils -it bash
+
+# curl my-service
+# exit
+
+Создаем Service типа Nodeport
+
+kubectl apply -f nodeport.yaml
+
+Проверяем что все ОК. Смотрим наши Service'ы, находим NodePort. Фиксируем, какой порт нам открылся и проверяем работу Service'а:
+
+kubectl get nodes
+kubectl get svc
+
+curl node-1.<номер студета>.slurm.io:<свой номер порта>
+curl master-1.<номер студета>.slurm.io:<свой номер порта>
+
+Создаем Service LoadBalancer
+
+kubectl create -f loadbalancer.yaml
+
+kubectl get svc
+
+Видим что в секции EXTERNAL-IP LoadBalancer стоит в <pending> так как сервисы такого типа работают только в облаках
+
+Подчищаем за собой:
+
+kubectl delete svc my-service-lb my-service-np
