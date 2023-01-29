@@ -1,0 +1,18 @@
+Ingress
+
+Перейдем в необходимую директорию и применим манифест, предварительно заменив <номер своего логина> на Ваш в файле nginx-ingress.yaml
+
+cd ~/slurm/practice/5.network-abstractions/2.ingress-and-services/
+
+kubectl apply -f nginx-ingress.yaml
+
+Посмотрим результат
+
+kubectl get pod -n ingress-nginx -o wide
+kubectl get ing
+
+Попробуем покурлить домен
+
+curl my.s<свой номер логина>.k8s.slurm.io
+
+Так же можете попробовать зайти на данный адрес в браузере, в режиме инкогнито
