@@ -1,0 +1,39 @@
+Запускаем Job
+
+Перейдем в необходимую директорию и применим манифест
+
+cd ~/slurm/practice/7.oneshot-tasks/1.job
+kubectl apply -f job.yaml
+
+Проверяем
+
+kubectl get job
+
+Видим:
+
+NAME    COMPLETIONS   DURATION   AGE
+hello   1/1           2s         88s
+
+Смотрим на поды
+
+kubectl get pod
+
+Видим под, созданный джобой:
+
+NAME          READY   STATUS      RESTARTS   AGE
+hello-6l9tv   0/1     Completed   0          2m6s
+
+Смотрим его логи
+
+kubectl logs hello-<TAB>
+
+Видим что все отработало правильно:
+
+Mon May 16 15:06:10 UTC 2022
+Hello from the Kubernetes cluster
+
+Удаляем джоб
+
+kubectl delete job hello
+
+И видим, что под удалился тоже
