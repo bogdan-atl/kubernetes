@@ -1,0 +1,45 @@
+апускаем CronJob
+
+Перейдем в необходимую директорию и применим манифест кронджоба
+
+cd ~/slurm/practice/7.oneshot-tasks/2.cronjob
+kubectl apply -f cronjob.yaml
+
+Проверяем
+
+kubectl get cronjob
+
+Видим:
+
+NAME    SCHEDULE      SUSPEND   ACTIVE   LAST SCHEDULE   AGE
+hello   */1 * * * *   False     0        <none>          14s
+
+Через минуту пробуем посмотреть на джобы
+
+kubectl get job
+
+Видим созданный джоб
+
+NAME               COMPLETIONS   DURATION   AGE
+hello-1552924260   1/1           2s         49s
+
+Смотрим на поды
+
+kubectl get pod
+
+Видим под
+
+NAME                     READY   STATUS      RESTARTS   AGE
+hello-1552924260-gp7pk   0/1     Completed   0          80s
+
+Можем ознакомиться с describe'ом кронджобы
+
+kubectl describe cj hello
+
+Если мы подождем 5-10 минут, то увидим что старые джобы и поды удаляются по мере появления новых
+
+kubectl get job,pod
+
+Удаляем крон джоб
+
+kubectl delete -f cronjob.yaml
