@@ -1,0 +1,21 @@
+DaemonSet
+
+Перейдем в необходимую директорию и применим манифест
+
+cd ~/slurm/practice/8.deployment-alternative/1.daemonset
+kubectl apply -f daemonset.yaml
+
+В ответ должны увидеть
+
+daemonset.apps/node-exporter created
+
+Смотрим на поды
+
+kubectl get pod -o wide
+
+Видим, что наш под node-exporter не запущен на master-нодах
+
+NAME                  READY   STATUS    RESTARTS   AGE   IP               NODE                         NOMINATED NODE   READINESS GATES
+node-exporter-czke5   1/1     Running   0          24s   10.244.190.194   node-2.s028898.slurm.io      <none>           <none>
+node-exporter-sk957   1/1     Running   0          24s   10.244.152.129   ingress-1.s028898.slurm.io   <none>           <none>
+node-exporter-xp78k   1/1     Running   0          24s   10.244.199.2     node-1.s028898.slurm.io      <none>           <none>

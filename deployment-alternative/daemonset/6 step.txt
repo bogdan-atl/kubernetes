@@ -1,0 +1,65 @@
+Taints and Tolerations
+
+Проверим наши поды, видим что они запущенны не на всех нодах
+
+NAME                  READY   STATUS    RESTARTS   AGE   IP               NODE                         NOMINATED NODE   READINESS GATES
+node-exporter-czke5   1/1     Running   0          24s   10.244.190.194   node-2.s028898.slurm.io      <none>           <none>
+node-exporter-sk957   1/1     Running   0          24s   10.244.152.129   ingress-1.s028898.slurm.io   <none>           <none>
+node-exporter-xp78k   1/1     Running   0          24s   10.244.199.2     node-1.s028898.slurm.io      <none>           <none>
+
+Посмотрим taint мастера-1, командой
+
+kubectl get nodes master-1.<номер студента>.slurm.io -o json | jq '.spec.taints'
+
+Видим следующий результат
+
+    "effect": "NoSchedule",
+    "key": "node-role.kubernetes.io/master"
+
+А поле key нашего манифеста отличается: node-role.kubernetes.io/ingress
+
+Изменим манифест, добавив
+
+      tolerations:
+      - effect: NoSchedule
+        operator: Exists
+
+Применим получившуюся конфигурацию
+
+kubectl apply -f daemonset.yaml
+
+И видим примерно следующую картину. Один под у нас в состоянии Pending
+
+NAME                  READY   STATUS    RESTARTS   AGE   IP               NODE                         NOMINATED NODE   READINESS GATES
+node-exporter-c26zr   0/1     Pending   0          21s   <none>           <none>                       <none>           <none>
+node-exporter-cnl9x   1/1     Running   0          21s   10.244.152.134   ingress-1.s028898.slurm.io   <none>           <none>
+node-exporter-pf5pz   1/1     Running   0          21s   10.244.199.7     node-1.s028898.slurm.io      <none>           <none>
+node-exporter-zdwi9   1/1     Running   0          21s   10.244.190.200   node-2.s028898.slurm.io      <none>           <none>
+
+Посмотрим его describe дабы узнать что с ним не так
+
+kubectl describe pod node-exporter-<TAB>
+
+И в Events видим что под не влезает по ресурсам CPU
+
+Удалим созданные объекты
+
+kubectl delete -f daemonset.yaml
+
+Сделаем дополнительно describe мастер ноды
+
+kubectl describe nodes master-1.<номер студента>.slurm.io
+
+И увидим использование текущих ресурсов
+
+Allocated resources:
+  (Total limits may be over 100 percent, i.e., overcommitted.)
+  Resource           Requests    Limits
+  --------           --------    ------
+  cpu                1 (100%)    0 (0%)
+  memory             170Mi (4%)  170Mi (4%)
+  ephemeral-storage  0 (0%)      0 (0%)
+  hugepages-1Gi      0 (0%)      0 (0%)
+  hugepages-2Mi      0 (0%)      0 (0%)
+
+Это учебный кластер и ресурсов выделено не много. В данном случае можем просто закоментировать или удалить блок с заданием ресурсов в манифесте и применить его снова
