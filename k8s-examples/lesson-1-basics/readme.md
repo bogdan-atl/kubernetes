@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-	<title>README.md</title>
+	
 </head>
 <body>
 	<h1>Введение в Kubernetes (k8s):</h1>
