@@ -1,12 +1,12 @@
-apiVersion: v1
-kind: Service
+apiVersion: v1  # версия API, используемая для создания ресурса
+kind: Service  # тип ресурса, который мы создаем
 metadata:
-  name: my-app-service
+  name: my-app-service  # имя ресурса
 spec:
-  selector:
+  selector:  # метки, используемые для выбора подов, которые будут входить в сервис
     app: my-app
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: LoadBalancer
+  ports:  # список открытых портов сервиса
+    - protocol: TCP  # протокол, используемый для порта
+      port: 80  # открытый порт сервиса
+      targetPort: 80  # порт, на который должны быть перенаправлены запросы
+  type: LoadBalancer  # тип сервиса, в данном случае, сервис будет являться балансировщиком нагрузки

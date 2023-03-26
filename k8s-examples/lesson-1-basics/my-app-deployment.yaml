@@ -1,19 +1,19 @@
-apiVersion: apps/v1
-kind: Deployment
+apiVersion: apps/v1  # версия API, используемая для создания ресурса
+kind: Deployment  # тип ресурса, который мы создаем
 metadata:
-  name: my-app
+  name: my-app  # имя ресурса
 spec:
-  replicas: 2
-  selector:
+  replicas: 2  # желаемое количество реплик для создания
+  selector:  # критерий выбора подов для включения в деплоймент
     matchLabels:
-      app: my-app
-  template:
+      app: my-app  # поды, у которых есть метка "app: my-app", будут включены в деплоймент
+  template:  # шаблон Pod, который будет создаваться деплойментом
     metadata:
       labels:
-        app: my-app
+        app: my-app  # метка, которая будет назначена каждому создаваемому поду
     spec:
-      containers:
-      - name: my-container
-        image: nginx:latest
-        ports:
-        - containerPort: 80
+      containers:  # список контейнеров, которые будут запущены в каждом поде
+      - name: my-container  # имя контейнера
+        image: nginx:latest  # образ контейнера
+        ports:  # список открытых портов контейнера
+        - containerPort: 80  # открытый порт контейнера
