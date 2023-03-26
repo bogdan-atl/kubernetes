@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Урок 2: ConfigMaps и Secrets</title>
+	
 </head>
 <body>
 	<h1>Цель урока: научиться работать с ConfigMaps и Secrets для хранения конфигураций и секретных данных.</h1>
