@@ -1,0 +1,10 @@
+apiVersion: v1 # версия API Kubernetes, используемая в манифесте
+kind: ConfigMap # тип ресурса, описываемого манифестом
+metadata:
+  name: my-app-config # имя ConfigMap
+data:
+  app-config.json: | # содержимое файла app-config.json, указанное в формате YAML многострочным блоком
+    {
+      "apiUrl": "https://api.example.com",
+      "logLevel": "info"
+    }

@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-app
+spec:
+  replicas: 1 # количество реплик пода, которые должны быть созданы
+  selector:
+    matchLabels:
+      app: my-app # метки для выбора подов, управляемых этим развертыванием
+  template:
+    metadata:
+      labels:
+        app: my-app # метки, применяемые к поду
+    spec:
+      containers:
+        - name: my-app # имя контейнера
+          image: my-app-image:latest # образ, который должен быть запущен в контейнере
+          ports:
+            - containerPort: 3000 # порт, который должен быть открыт в контейнере
+          envFrom:
+            - configMapRef:
+                name: my-app-config # ссылка на ConfigMap, из которого будут получены переменные окружения
+          env:
+            - name: API_KEY # имя переменной окружения
+              valueFrom:
+                secretKeyRef:
+                  name: my-app-secret # ссылка на Secret, из которого будет получено значение переменной окружения
+                  key: api-key # имя ключа в Secret, соответствующего переменной окружения
