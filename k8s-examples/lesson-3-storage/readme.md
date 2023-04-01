@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-
+	<title>Инструкция по использованию PVC и StorageClass в Kubernetes</title>
 </head>
 <body>
 	<h1>Инструкция по использованию PVC и StorageClass в Kubernetes</h1>
@@ -17,7 +17,6 @@ metadata:
 provisioner: kubernetes.io/no-provisioner  # Определяем провайдера хранилища. Здесь используется no-provisioner, что означает, что этот StorageClass не будет создавать PV автоматически.
 reclaimPolicy: Retain  # Определяем политику восстановления PV, если PVC был удален. Здесь используется Retain, что означает, что PV и данные на нем будут сохранены после удаления PVC.
 volumeBindingMode: Immediate  # Определяем режим привязки объемов - Immediate. Это означает, что PVC будет немедленно привязан к PV.
-
     </pre>
 	<p>В этом манифесте мы определяем StorageClass с именем "slow", который использует хранилище типа "slow" и доступен в зоне "us-west1". Мы также указываем, что данный StorageClass не предоставляет динамическое выделение хранилища, то есть не будет создавать PV автоматически.</p>
 	<h2>Определение PersistentVolume:</h2>
