@@ -2,7 +2,7 @@
 <html>
 <head>
 	<meta charset="UTF-8">
-	<title>Инструкция по использованию PVC и StorageClass в Kubernetes</title>
+
 </head>
 <body>
 	<h1>Инструкция по использованию PVC и StorageClass в Kubernetes</h1>
